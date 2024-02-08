@@ -1,0 +1,139 @@
+1) 
+
+SELECT *
+  FROM [dbo].[Impiegati]
+  where Eta >= 29 
+2)
+SELECT *
+  FROM [dbo].[Impiegati]
+  where RedMensile >= 800
+3)
+SELECT *
+  FROM [dbo].[Impiegati]
+  where DetFiscale = 1
+4)
+SELECT *
+  FROM [dbo].[Impiegati]
+  where DetFiscale = 0
+5)
+SELECT *
+  FROM [dbo].[Impiegati]
+  where Cognome like 'g%'
+  order by Cognome
+6)
+SELECT count(*) as TotImiegati
+  FROM [dbo].[Impiegati]
+7)
+SELECT sum(RedMensile)as TotRedditi
+  FROM [dbo].[Impiegati]
+8)
+SELECT avg(RedMensile)as MediaRedditi
+  FROM [dbo].[Impiegati]
+9)
+SELECT max(RedMensile) as MaxReddito
+  FROM [dbo].[Impiegati]
+10)
+SELECT min(RedMensile) as MinReddito
+  FROM [dbo].[Impiegati]
+11)
+SELECT Nome, Cognome
+  FROM [dbo].[Impiegati]
+  where DataAssunzione between '01/01/2007' and '01/01/2008'
+12)
+SELECT *
+  FROM [dbo].[Impiegati] as e
+  join dbo.Impiego as r on e.IDImpiego = r.IDImpiego
+  where r.IDImpiego = 3
+13)
+SELECT avg(Eta) as MediaEta
+  FROM [dbo].[Impiegati] 
+
+STOREDPROCEDURE
+
+1)
+
+USE [WorkEmployees]
+GO
+/****** Object:  StoredProcedure [dbo].[InsertNewEmploy]    Script Date: 08/02/2024 16:14:03 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE [dbo].[InsertNewEmploy] @Cognome varchar(50),
+           @Nome varchar(50),
+           @CodFiscale char(16),
+           @Eta int,
+           @RedMensile money,
+           @DetFiscale bit,
+           @DataAssunzione date,
+           @IDImpiego int
+AS
+BEGIN
+	SET NOCOUNT ON;
+	INSERT INTO [dbo].[Impiegati]
+           ([Cognome]
+           ,[Nome]
+           ,[CodFiscale]
+           ,[Eta]
+           ,[RedMensile]
+           ,[DetFiscale]
+           ,[DataAssunzione]
+           ,[IDImpiego])
+     VALUES
+           (@Cognome,@Nome,@CodFiscale,@Eta,@RedMensile,@DetFiscale,@DataAssunzione,@IDImpiego)
+END
+
+2)
+
+CREATE PROCEDURE [dbo].[EditImpiegato]
+@NameQ varchar(50),
+@CognomeQ varchar(50),
+ @Cognome varchar(50),
+           @Nome varchar(50),
+           @CodFiscale char(16),
+           @Eta int,
+           @RedMensile money,
+           @DetFiscale bit,
+           @DataAssunzione date,
+           @IDImpiego int
+	
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+	UPDATE [dbo].[Impiegati]
+   SET [Cognome] = @Cognome
+      ,[Nome] = @Nome
+      ,[CodFiscale] = @CodFiscale
+      ,[Eta] = @Eta
+      ,[RedMensile] = @RedMensile
+      ,[DetFiscale] = @DetFiscale
+      ,[DataAssunzione] = @DataAssunzione
+      ,[IDImpiego] = @IDImpiego
+ WHERE Cognome like '%'+@CognomeQ+'%' and Nome like '%'+@NameQ+'%' 
+END
+
+
+3)
+
+CREATE PROCEDURE [dbo].[DeleteImpiegato]
+@NameQ varchar(50),
+@CognomeQ varchar(50)
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+	DELETE FROM [dbo].[Impiegati]
+       WHERE Cognome like '%'+@CognomeQ+'%' and Nome like '%'+@NameQ+'%' 
+END
+
+
+
+
